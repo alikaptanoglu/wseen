@@ -1,3 +1,4 @@
+// ignore_for_file: use_full_hex_values_for_flutter_colors
 import 'package:flutter/material.dart';
 
 class ProjectColors {
@@ -10,6 +11,7 @@ class ProjectColors {
   static Color themeColorMOD2 = const Color.fromARGB(255, 220, 220, 220);
   static Color themeColorMOD3 = const Color.fromARGB(255, 21, 21, 29);
   static Color themeColorMOD4 = const Color.fromARGB(255, 31,33,46);
+  static Color themeColorMOD5 = const Color(0xffbff9a5c);
 
   static Color menuColor = const Color.fromARGB(255, 20, 20, 20);
   static Color iconColor = const Color.fromARGB(255, 107, 109, 255);

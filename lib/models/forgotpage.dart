@@ -2,18 +2,19 @@ import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:weloggerweb/models/utils.dart';
-import 'package:weloggerweb/products/products.dart';
-import 'package:weloggerweb/providers/providers.dart';
+import 'package:wseen/models/utils.dart';
+import 'package:wseen/products/products.dart';
+import 'package:wseen/providers/providers.dart';
+import 'package:wseen/screens/screens.dart';
 
-class ForgotPage extends StatefulWidget {
-  const ForgotPage({Key? key}) : super(key: key);
+class Forgot extends StatefulWidget {
+  const Forgot({Key? key}) : super(key: key);
 
   @override
-  State<ForgotPage> createState() => _ForgotPageState();
+  State<Forgot> createState() => _ForgotState();
 }
 
-class _ForgotPageState extends State<ForgotPage> {
+class _ForgotState extends State<Forgot> {
 
   MouseProvider? mouseProvider;
 
@@ -33,17 +34,33 @@ class _ForgotPageState extends State<ForgotPage> {
 
   @override
   Widget build(BuildContext context) {
-    mouseProvider = Provider.of<MouseProvider>(context);
+    mouseProvider = Provider.of<MouseProvider>(context, listen: false);
     SizeConfig.init(context);
-    SizeConfig.getDevice();
-    return Container(
-      height: SizeConfig.screenHeight! - Values.barHeight,
-      width: SizeConfig.isDesktop! ? SizeConfig.screenWidth! - Values.desktopMenuWidth : SizeConfig.screenWidth,
-      padding: ProjectPadding.horizontalPadding(value: 40),
-      child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [text(), Space.mHeight, field(), Space.mHeight, button()]),
+    return Scaffold(
+      body: SizedBox(
+        width: SizeConfig.screenWidth,
+        height: SizeConfig.screenHeight,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Container(
+              width: SizeConfig.screenWidth,
+              height: 80,
+              decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Colors.white30, width: 1)), color: Color.fromARGB(255, 10, 10, 12)),
+              child: const Center(child: Text('Wseen', style: TextStyle(color: Colors.white, fontSize: 30))),
+            ),
+            Container(
+              width: SizeConfig.screenWidth,
+              height: SizeConfig.screenHeight! - 80,
+              decoration: const BoxDecoration(gradient: LinearGradient(colors: [Color.fromARGB(255, 22, 22, 25), Colors.black, Color.fromARGB(255, 15, 17, 19)], begin: Alignment.topLeft, end: Alignment.bottomRight)),
+              padding: ProjectPadding.horizontalPadding(value: 40),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [text(), Space.mHeight, field(), Space.mHeight, button()]),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -54,7 +71,7 @@ class _ForgotPageState extends State<ForgotPage> {
 
   Widget field() {
     return SizedBox(
-      width: Values.mobileInputFieldWidth,
+      width: SizeConfig.screenWidth! < 600 ? SizeConfig.screenWidth! * .8 : 500,
       child: Form(
         key: formkey,
         child: TextFormField(
@@ -76,7 +93,7 @@ class _ForgotPageState extends State<ForgotPage> {
         onEnter: (_) => mouseProvider!.toggleResetHover(),
         onExit: (_) => mouseProvider!.toggleResetHover(),
         child: Container(
-          width: Values.mobileInputFieldWidth,
+          width: SizeConfig.screenWidth! < 600 ? SizeConfig.screenWidth! * .8 : 500,
           height: 50,
           decoration: BoxDecoration(
               color: Colors.transparent,
@@ -99,10 +116,10 @@ class _ForgotPageState extends State<ForgotPage> {
     final isValid = formkey.currentState!.validate();
     if (!isValid) return;
     try {
-      await FirebaseAuth.instance.sendPasswordResetEmail(email: emailController.text).whenComplete(() => Utils.showSnackBar(text: 'Password reset email sent', color: Colors.green, )).then((value) => Navigator.popUntil(context, (route) => route.isFirst));
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: emailController.text).whenComplete(() => Utils.showSnackBar(text: 'Password reset email sent', color: Colors.green, )).then((value) => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> const Sign())));
     } on FirebaseAuthException catch (e) {
-      Navigator.popUntil(context, (route) => route.isFirst);
-      Utils.showSnackBar(text: e.message, );
+      Navigator.of(context).pushNamed('/sign');
+      Utils.showSnackBar(text: e.message);
     }
   }
 }

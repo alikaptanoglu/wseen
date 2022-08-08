@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:weloggerweb/services/services.dart';
+import 'package:wseen/services/services.dart';
 
 class UserProvider extends ChangeNotifier {
   String _userName = '';
@@ -15,7 +15,8 @@ class UserProvider extends ChangeNotifier {
   }
 
   Future<void> getName(uid) async {
-    _userName = await DbService().getUserInfo(uid);
+    final list = await DbService().getUserInfo(uid);
+    _userName = list[0];
     notifyListeners();
   }
 }

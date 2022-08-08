@@ -1,9 +1,30 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DbService {
-  Future<String> getUserInfo(String uid) async {
+
+  updateUserToken(String uid, dynamic token){
+    FirebaseFirestore.instance.collection('webusers').doc(uid).update({
+      'notification_token': token
+    });
+  }
+
+  static getContacts(String uid) async {
+    List contactList = [];
+    DocumentSnapshot userSnapshot = await FirebaseFirestore.instance.collection('webusers').doc(uid).get();
+    final Map contactsMap = userSnapshot.get('contacts');
+    for(var contact in contactsMap.values){
+      contactList.add(contact);
+    }
+    return contactList;
+  }
+
+  Future<List<String>> getUserInfo(String uid) async {
     DocumentSnapshot snapshot = await FirebaseFirestore.instance.collection('webusers').doc(uid).get();
-    return snapshot.get('username');
+    final String userName = snapshot.get('username');
+    final String email = snapshot.get('email');
+    final String password = snapshot.get('password');
+    List<String> userInfo = [userName, email, password];
+    return userInfo;
   }
 
   Future addContactToDatabase(String uid, String number, String name) async {
@@ -34,11 +55,6 @@ class DbService {
       totalMap.addAll(oldMap);
       totalMap.addAll(newMap);
       await FirebaseFirestore.instance.collection('webcontacts').doc(number).update({
-        'is_first': true,
-        'is_online': null,
-        'last_seen': null,
-        'sent_message': false,
-        'document_id': number,
         'users': totalMap
       });
     }

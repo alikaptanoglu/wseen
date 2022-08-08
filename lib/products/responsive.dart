@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class SizeConfig {
+  
   static MediaQueryData? mediaQueryData;
   static double? screenWidth;
   static double? screenHeight;
@@ -11,9 +12,6 @@ class SizeConfig {
   static double? safeBlockHorizontal;
   static double? safeBlockVertical;
 
-  static bool? isMobile;
-  static bool? isTablet;
-  static bool? isDesktop;
 
   static void init(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
@@ -25,24 +23,5 @@ class SizeConfig {
     _safeAreaVertical = mediaQueryData!.padding.top + mediaQueryData!.padding.bottom;
     safeBlockHorizontal = (screenWidth! - _safeAreaHorizontal!) / 100;
     safeBlockVertical = (screenHeight! - _safeAreaVertical!) / 100;
-  }
-
-  static void getDevice() {
-    if (screenWidth! > 1000) {
-      // TO DO DESKTOP
-      isDesktop = true;
-      isTablet = false;
-      isMobile = false;
-    } else if (screenWidth! > 600) {
-      // TO DO TABLET
-      isDesktop = false;
-      isTablet = true;
-      isMobile = false;
-    } else {
-      // TO DO MOBİLE
-      isDesktop = false;
-      isTablet = false;
-      isMobile = true;
-    }
   }
 }

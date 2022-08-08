@@ -3,8 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:weloggerweb/products/products.dart';
-import 'package:weloggerweb/services/services.dart';
+import 'package:wseen/products/products.dart';
+import 'package:wseen/services/services.dart';
 
 class BuildOnboard extends StatelessWidget {
   final ImageProvider<Object> image;
@@ -32,7 +32,7 @@ class BuildOnboard extends StatelessWidget {
         child: Container(
           width: SizeConfig.screenWidth,
           height: SizeConfig.screenHeight,
-          decoration: BoxDecoration(image: DecorationImage(image: ImageEnums.xd.assetImage, fit: BoxFit.cover)),
+          decoration: BoxDecoration(image: DecorationImage(image: ImageEnums.back.assetImage, fit: BoxFit.cover)),
           child: Column(
             children: [
               Expanded(
@@ -56,36 +56,18 @@ class BuildOnboard extends StatelessWidget {
                 padding: const EdgeInsets.all(20),
                 child: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, 
                 children: [
-                  Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 20),
-                      child: FittedBox(
-                          child: Text(
-                        header,
-                        style: GoogleFonts.sourceSansPro(
-                          fontSize: 24,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w900,
-                          decoration: TextDecoration.none,
-                        ),
-                        maxLines: 1,
-                        textAlign: TextAlign.center,
-                      ))),
-                  Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Text(text,
-                          style: GoogleFonts.sourceSansPro(
-                            fontSize: 14,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w300,
-                            decoration: TextDecoration.none,
-                          ),
-                          textAlign: TextAlign.center)),
+                  Container(margin: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Text(header,style: GoogleFonts.sourceSansPro(fontSize: SizeConfig.screenWidth! < 350 ? 18 : 24,color: Colors.white,fontWeight: FontWeight.w900,decoration: TextDecoration.none),
+                      maxLines: 1,textAlign: TextAlign.center)),
+                  Container(margin: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Text(text,style: GoogleFonts.sourceSansPro(fontSize: SizeConfig.screenWidth! < 350 ? 12 : 14,color: Colors.white,fontWeight: FontWeight.w300,decoration: TextDecoration.none),
+                        textAlign: TextAlign.center, maxLines: 3)),
                   AnimatedSmoothIndicator(
                     activeIndex: index,
                     count: 3,
                     effect: ExpandingDotsEffect(
                         spacing: 4,
-                        activeDotColor: Colors.orange,
+                        activeDotColor: ProjectColors.themeColorMOD5,
                         dotColor: Colors.white.withOpacity(0.2),
                         dotWidth: 8,
                         dotHeight: 8),
@@ -97,11 +79,12 @@ class BuildOnboard extends StatelessWidget {
                           height: 50,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
-                            color: Colors.orange,
+                            color: ProjectColors.themeColorMOD5,
                           ),
                           child: Center(
                               child: Text(
                             'Continue',
+                            maxLines: 1,
                             style: GoogleFonts.poppins(
                               decoration: TextDecoration.none,
                               fontWeight: FontWeight.w500,
@@ -114,7 +97,7 @@ class BuildOnboard extends StatelessWidget {
                         if(isViewed!){
                           await _storeOnBoardInfo();
                         }
-                        Navigator.pushAndRemoveUntil<dynamic>(context, MaterialPageRoute<dynamic>(builder: (BuildContext context) => nextPage),(route) => false);}),
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => nextPage));}),
                 ]),
               ),
             ],

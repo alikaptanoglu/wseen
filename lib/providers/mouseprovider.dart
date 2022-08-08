@@ -10,19 +10,11 @@ class MouseProvider extends ChangeNotifier {
   late bool _doesntHaveAccount = false;
   bool get doesntHaveAccount => _doesntHaveAccount;
 
-  late bool _rememberPass = false;
-  bool get rememberPass => _rememberPass;
-
   late bool _resetHover = false;
   bool get resetHover => _resetHover;
 
   toggleResetHover() {
     _resetHover = !_resetHover;
-    notifyListeners();
-  }
-
-  toggleRememberPass() {
-    _rememberPass = !_rememberPass;
     notifyListeners();
   }
 

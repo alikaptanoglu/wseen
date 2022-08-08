@@ -10,7 +10,7 @@ class AuthService {
     return user.user;
   }
 
-  Future<User?> signUp(String name, String email, String password) async {
+  Future<User?> signUp(String name, String email, String password, dynamic notificationToken, String subscriptionType) async {
     var user = await _auth.createUserWithEmailAndPassword(email: email, password: password);
     await _firestore.collection('webusers').doc(user.user!.uid).set({
       'username': name,
@@ -19,9 +19,15 @@ class AuthService {
       'contact_count': 0,
       'contacts': {},
       'uid': user.user!.uid,
-      'subscribe': false,
+      'notification_token': notificationToken,
+      'subscription_type': subscriptionType,
+      'subscription_expiration_date': DateTime.now().add(const Duration(hours: 8))
     });
     return user.user;
+  }
+
+  static deleteUser(){
+    FirebaseAuth.instance.currentUser!.delete();
   }
 
   signOut() async {

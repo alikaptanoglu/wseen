@@ -40,4 +40,15 @@
         }
         return finalMap[key];
       }
+
+      static bool cookieContainsKey(String key){
+        String? cookies = document.cookie!;
+        List<String> cookieList = cookies.isNotEmpty ? cookies.split(";") : [];
+         Map finalMap = {}; 
+        for (int i = 0; i < cookieList.length; i++) {
+          Map listToMap = {cookieList[i].split("=").elementAt(0).replaceAll(' ', '') : cookieList[i].split("=").elementAt(1).replaceAll(' ', '')};
+          finalMap.addEntries(listToMap.entries);
+        }
+        return finalMap.containsKey('email');
+      }
     }

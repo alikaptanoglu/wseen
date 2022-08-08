@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:weloggerweb/globalvalues/globalvalues.dart';
-import 'package:weloggerweb/helpers/helpers.dart';
-import 'package:weloggerweb/models/models.dart';
-import 'package:weloggerweb/products/products.dart';
+import 'package:provider/provider.dart';
+import 'package:wseen/models/models.dart';
+import 'package:wseen/products/products.dart';
+import 'package:wseen/providers/providers.dart';
 
 class DetailsCard extends StatefulWidget {
   final String number;
@@ -18,11 +18,12 @@ class _DetailsCardState extends State<DetailsCard> {
   Widget build(BuildContext context) {
     var totalActivities = 0;
     SizeConfig.init(context);
-    SizeConfig.getDevice();
-    return StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('webcontacts').doc(widget.number).collection('logs').where('start',isGreaterThanOrEqualTo: controller.startDate.value, isLessThanOrEqualTo: controller.endDate.value).snapshots(),
+    return Consumer<ModelProvider>(
+      builder: (context, value, child) {
+        return StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance.collection('webcontacts').doc(widget.number).collection('logs').where('start',isGreaterThanOrEqualTo: value.startDate, isLessThanOrEqualTo: value.endDate).snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          var totalDuration = 0;
+          Duration totalDuration = const Duration(seconds: 0);
           bool isOnline = false;
 
           if(snapshot.hasData){
@@ -45,7 +46,7 @@ class _DetailsCardState extends State<DetailsCard> {
                     : DateTime.parse(formattedDate(document['end'])).subtract(const Duration(hours: 3));
                 diff = end.difference(start);
 
-                totalDuration += diff.inSeconds;
+                totalDuration += diff;
                 
                 document['end'] == null 
                   ? onStart = start
@@ -55,28 +56,30 @@ class _DetailsCardState extends State<DetailsCard> {
 
                 if(i == snapshot.data!.docs.length){
                   return  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                     snapshot.data!.docs.isNotEmpty ? 
                     Container(
                         margin: const EdgeInsets.only(right: 10, left: 20, top: 20),
                         padding: const EdgeInsets.symmetric(horizontal: 10),
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(Values.contactCardRadius/2),color:Colors.transparent,border: Border.all(color: Colors.grey, width: 1),),
-                        width: SizeConfig.isDesktop! ? (SizeConfig.screenWidth! - Values.desktopMenuWidth)/2 - 30 : SizeConfig.screenWidth!/2 - 30,
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(Values.contactCardRadius/2),color:Colors.transparent,border: Border.all(color: Colors.grey, width: 1)),
+                        width: SizeConfig.screenWidth! < 600 ? (SizeConfig.screenWidth! * .4)-20 : 230,
                         height: 140,
                         child: Center(child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                        const Text('Total Online Activities',style: TextStyle(color: Colors.white,fontWeight: FontWeight.w300,fontSize: 18),textAlign: TextAlign.center, ), 
+                        const Text('Total Online Activities',style: TextStyle(color: Colors.white,fontWeight: FontWeight.w300,fontSize: 18),textAlign: TextAlign.center), 
                         const SizedBox(height: 5,),
                         Text(totalActivities.toString(),style: const TextStyle(fontSize: 18,color: Colors.white,fontWeight: FontWeight.w400)),
                         ],
                         )),
                       ) : 
                       Container(),
+                      Space.spaceWidth(20),
                       snapshot.data!.docs.isNotEmpty ? Container(
                         decoration: BoxDecoration(borderRadius: BorderRadius.circular(Values.contactCardRadius/2),color:Colors.transparent,border: Border.all(color: Colors.grey, width: 1),),
                         margin: const EdgeInsets.only(right: 20, left: 10, top: 20),
-                        width: SizeConfig.isDesktop! ? (SizeConfig.screenWidth! - Values.desktopMenuWidth)/2 - 30 : SizeConfig.screenWidth!/2 - 30,
+                        width: SizeConfig.screenWidth! < 600 ? (SizeConfig.screenWidth! * .4)-20 : 230,
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         height: 140,
                         child: isOnline ? StreamBuilder(
@@ -91,7 +94,7 @@ class _DetailsCardState extends State<DetailsCard> {
                         children: [
                         const Text('Total Online Duration',style: TextStyle(color: Colors.white,fontWeight: FontWeight.w300,fontSize: 18),textAlign: TextAlign.center,), 
                         const SizedBox(height: 5,),
-                        Text(printDuration(sayac + totalDuration.seconds),style: const TextStyle(fontSize: 16,color: Colors.white,fontWeight: FontWeight.w400)),
+                        Text(printDuration(sayac + totalDuration),style: const TextStyle(fontSize: 16,color: Colors.white,fontWeight: FontWeight.w400)),
                         ],
                         ),
                                   );
@@ -104,7 +107,7 @@ class _DetailsCardState extends State<DetailsCard> {
                         children: [
                         const Text('Total Online Duration',style: TextStyle(color: Colors.white,fontWeight: FontWeight.w300,fontSize: 18),textAlign: TextAlign.center,), 
                         const SizedBox(height: 5,),
-                        Text(printDuration(totalDuration.seconds),style: const TextStyle(fontSize: 20,color: Colors.white,fontWeight: FontWeight.w400,)),
+                        Text(printDuration(totalDuration),style: const TextStyle(fontSize: 20,color: Colors.white,fontWeight: FontWeight.w400,)),
                         ],
                         ),
                         ),
@@ -121,5 +124,7 @@ class _DetailsCardState extends State<DetailsCard> {
             return Space.emptySpace;
           }
         });
+      },
+    );
   }
 }

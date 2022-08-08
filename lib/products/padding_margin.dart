@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weloggerweb/products/responsive.dart';
+import 'package:wseen/products/responsive.dart';
 
 class ProjectPadding {
   static double? rSHorizontalPadding;
