@@ -3,16 +3,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:wseen/products/products.dart';
 
-class Loading extends StatelessWidget {
-  final Color? color;
-  const Loading({Key? key, this.color = Colors.orange}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(child: CircularProgressIndicator(color: color));
-  }
-}
-
 class LoadingScreen extends StatelessWidget {
   const LoadingScreen({Key? key}) : super(key: key);
 
@@ -62,7 +52,7 @@ class _LoadingScreenWithDurationState extends State<LoadingScreenWithDuration> {
   @override
   Widget build(BuildContext context) {
     return isLoad
-        ? const Center(child: CircularProgressIndicator(color: Color.fromARGB(255, 220, 220, 220)))
+        ? const LoadingThreeDots()
         : widget.route;
   }
 }
@@ -241,6 +231,142 @@ class _LoadingScreenThreeDotsState extends State<LoadingScreenThreeDots> with Ti
   }
 }
 
+class LoadingThreeDots extends StatefulWidget {
+  const LoadingThreeDots({Key? key}) : super(key: key);
+
+  @override
+  State<LoadingThreeDots> createState() => _LoadingThreeDotsState();
+}
+
+class _LoadingThreeDotsState extends State<LoadingThreeDots> with TickerProviderStateMixin {
+
+  double isScreenOpac = 1;
+  double isLoadingOpac = 1;
+
+  late AnimationController firstController;
+  late Animation<double> firstAnimation;
+
+  late AnimationController secondController;
+  late Animation<double> secondAnimation;
+
+  late AnimationController thirdController;
+  late Animation<double> thirdAnimation;
+
+  late AnimationController fourthController;
+  late Animation<double> fourthAnimation;
+
+  late AnimationController fifthController;
+  late Animation<double> fifthAnimation;
+
+  @override
+  void initState() {
+
+    // FIRST CONTROLLER
+    firstController = AnimationController(vsync: this, duration: const Duration(seconds: 6));
+    firstAnimation = Tween<double>(begin: -pi, end: pi).animate(firstController)..addListener(() { 
+      setState(() {
+        
+      });
+    })..addStatusListener((status) {
+      if(status == AnimationStatus.completed) firstController.repeat();
+      if(status == AnimationStatus.dismissed) firstController.forward();
+    }); 
+
+    // SECOND CONTROLLER
+    secondController = AnimationController(vsync: this, duration: const Duration(seconds: 3));
+    secondAnimation = Tween<double>(begin: -pi, end: pi).animate(secondController)..addListener(() { 
+      setState(() {
+        
+      });
+    })..addStatusListener((status) {
+      if(status == AnimationStatus.completed) secondController.repeat();
+      if(status == AnimationStatus.dismissed) secondController.forward();
+    });    
+
+    // THİRD CONTROLLER
+    thirdController = AnimationController(vsync: this, duration: const Duration(seconds: 2));
+    thirdAnimation = Tween<double>(begin: -pi, end: pi).animate(thirdController)..addListener(() { 
+      setState(() {
+        
+      });
+    })..addStatusListener((status) {
+      if(status == AnimationStatus.completed) thirdController.repeat();
+      if(status == AnimationStatus.dismissed) thirdController.forward();
+    });    
+
+    // FOURTH CONTROLLER
+    fourthController = AnimationController(vsync: this, duration: const Duration(milliseconds: 1500));
+    fourthAnimation = Tween<double>(begin: -pi, end: pi).animate(fourthController)..addListener(() { 
+      setState(() {
+        
+      });
+    })..addStatusListener((status) {
+      if(status == AnimationStatus.completed) fourthController.repeat();
+      if(status == AnimationStatus.dismissed) fourthController.forward();
+    });    
+
+    // FİFTH CONTROLLER
+    fifthController = AnimationController(vsync: this, duration: const Duration(seconds: 1));
+    fifthAnimation = Tween<double>(begin: -pi, end: pi).animate(fifthController)..addListener(() { 
+      setState(() {
+        
+      });
+    })..addStatusListener((status) {
+      if(status == AnimationStatus.completed) fifthController.repeat();
+      if(status == AnimationStatus.dismissed) fifthController.forward();
+    });
+
+    firstController.forward();
+    secondController.forward();
+    thirdController.forward();
+    fourthController.forward();
+    fifthController.forward();
+    
+    super.initState();
+    
+  }
+
+  @override
+  void dispose() {
+    firstController.dispose();
+    secondController.dispose();
+    thirdController.dispose();
+    fourthController.dispose();
+    fifthController.dispose();
+    super.dispose();
+  }
+
+  final Color bodyColor = const Color.fromARGB(255, 20, 22, 25);
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedOpacity(
+      duration: const Duration(seconds: 1),
+      opacity: isScreenOpac,
+      child: Container(
+        width: SizeConfig.screenWidth,
+        height: SizeConfig.screenHeight,
+        color: bodyColor,
+        child: Center(
+          child: AnimatedOpacity(
+            opacity: isLoadingOpac,
+            duration: const Duration(milliseconds: 100),
+            child: SizedBox(
+              width: 40,
+              height: 40,
+              child: CustomPaint(
+                painter: MyPainter(firstAnimation.value, secondAnimation.value, thirdAnimation.value, fourthAnimation.value, fifthAnimation.value),
+              ),
+            ),
+          )
+        ),
+      ),
+    );
+  }
+}
+
+
+
 class LoadingTick extends StatefulWidget {
   const LoadingTick({Key? key}) : super(key: key);
 
@@ -377,5 +503,5 @@ class BNBPainter extends CustomPainter{
   }
 }
 
-Widget loadingWidget() => Center(child: CircularProgressIndicator.adaptive(valueColor: AlwaysStoppedAnimation<Color>(ProjectColors.themeColorMOD5)));
+Widget loadingWidget() => const LoadingThreeDots();
 

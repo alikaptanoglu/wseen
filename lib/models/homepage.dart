@@ -82,10 +82,10 @@ class _MonitorState extends State<Monitor> {
       height: SizeConfig.screenHeight,
       color: const Color.fromARGB(255, 15, 17, 19),
       child: isPremium == null 
-      ? const CircularProgressIndicator.adaptive() 
+      ? Space.emptySpace
       : Consumer<ModelProvider>(
         builder: (context, value, child) {
-          return value.subscriptionExpDate == null ? loadingWidget()
+          return value.subscriptionExpDate == null ? Space.emptySpace
           : Scaffold(
             resizeToAvoidBottomInset: false,
             backgroundColor: const Color.fromARGB(255, 15, 17, 19),

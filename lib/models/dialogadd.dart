@@ -199,7 +199,7 @@ class _DialogAddState extends State<DialogAdd> {
                     Navigator.of(context).pop();
                     showDialog(context: context, builder: (context) {
                       loadingContext = context;
-                      return const Loading();
+                      return const LoadingThreeDots();
                     });
                     dbService.addContactToDatabase(FirebaseAuth.instance.currentUser!.uid, number, name).whenComplete(() => Navigator.of(loadingContext!).pop()).catchError((error){
                     Utils.showSnackBar(text: error.toString());

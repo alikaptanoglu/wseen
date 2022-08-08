@@ -10,6 +10,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:wseen/helpers/helpers.dart';
 import 'package:wseen/models/bar.dart';
+import 'package:wseen/models/loading.dart';
 import 'package:wseen/models/utils.dart';
 import 'package:wseen/products/products.dart';
 import 'package:wseen/providers/providers.dart';
@@ -59,6 +60,7 @@ class _PaymentState extends State<Payment> {
   Widget build(BuildContext context) {
     SizeConfig.init(context);
     return Scaffold(
+      resizeToAvoidBottomInset: true,
         body: SizedBox(
           width: SizeConfig.screenWidth,
           height: SizeConfig.screenHeight,
@@ -90,7 +92,7 @@ class _PaymentState extends State<Payment> {
                               height: SizeConfig.screenWidth! < 400 ? 40 : 50,
                               child: Center(child: Text('LIFETIME MEMBERSHIP', style: GoogleFonts.poppins(fontSize: SizeConfig.screenWidth! < 400 ? 14 : SizeConfig.screenWidth! < 600 ? 16 : 18, color: Colors.black, fontWeight: FontWeight.bold))),
                             ),
-                            Space.dividerHorizantal(width: SizeConfig.screenWidth! < 600 ? SizeConfig.screenWidth! * .8 - 40 : 460, color: const Color.fromARGB(255, 245, 245, 245)),
+                            Space.dividerHorizantal(width: SizeConfig.screenWidth! < 600 ? SizeConfig.screenWidth! * .8 - 40 : 460, color: const Color.fromARGB(255, 220, 220, 220)),
                             Container(
                               width: double.maxFinite,
                               height: SizeConfig.screenWidth! < 400 ? 40 : 50,
@@ -135,7 +137,7 @@ class _PaymentState extends State<Payment> {
   _pay() async {
     showDialog(builder: (BuildContext context) {
       loadingContext = context;
-      return const Center(child: CircularProgressIndicator.adaptive());
+      return const LoadingThreeDots();
     }, context: context);
     var expireMoth = expiryDate.split('/')[0];
     var expireYear = expiryDate.split('/')[1];

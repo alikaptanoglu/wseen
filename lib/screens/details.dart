@@ -85,7 +85,7 @@ class _DetailsState extends State<Details> {
         );
         }
         else{
-          return const Loading();
+          return const LoadingThreeDots();
         }
       },
     );

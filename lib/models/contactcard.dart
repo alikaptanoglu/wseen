@@ -27,14 +27,15 @@ class _ContactCardState extends State<ContactCard> {
         stream: FirebaseFirestore.instance.collection('webcontacts').snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (auth.currentUser == null) {
-            return const CircularProgressIndicator.adaptive();
+            return Space.emptySpace;
+            //return const LoadingThreeDots();
           } else {
             if (snapshot.hasData) {
               final doc = snapshot.data!.docs.where((element) => element.get('users').keys.contains(auth.currentUser!.uid));
               return Column(
                 children: doc.map((document) {
                 Color colorState() => document['is_online'] == null ? ProjectColors.greyColor : document['is_online'] ? ProjectColors.onlineColor : ProjectColors.offlineColor;
-                String onlineState() => document['is_online'] == null ? 'Waiting for first login' : document['is_online'] ? parsedJson['online'] : parsedJson['offline'];
+                String onlineState() => document['is_online'] == null ? 'Waiting for first login' : document['is_online'] ? 'Online' : 'Offline';
                 String name = document['users'][auth.currentUser!.uid]['name'];
                 String documentId = document['document_id'];
                 return GestureDetector(
@@ -73,7 +74,7 @@ class _ContactCardState extends State<ContactCard> {
                             ),
                             GestureDetector(
                                     onTap: () {
-                                      showDialog(context: context, builder: (context) => const Loading());
+                                      showDialog(context: context, builder: (context) => const LoadingThreeDots());
                                       DbService().deleteContactFromDatabase(FirebaseAuth.instance.currentUser!.uid, document.id).whenComplete(() => Navigator.of(context).pop());
                                     },
                                     child: Icon(Icons.delete, color: ProjectColors.offlineColor, size: Values.deleteIconSize))

@@ -62,15 +62,12 @@ class _MainState extends State<Main> {
       String password = cookieMap['password'];
       FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password).then((value) => Navigator.of(context).pushNamedAndRemoveUntil('/monitor', (route) => false));
     }
-    setState(() {
-      
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     SizeConfig.init(context);
-    return isLogin == null || isLogin! ? const Scaffold(backgroundColor: Color.fromARGB(255, 15, 17, 19) ,body: Center(child: CircularProgressIndicator.adaptive())) : body();
+    return isLogin == null || isLogin! ? const LoadingThreeDots() : body();
   }
 
   Scaffold body() {

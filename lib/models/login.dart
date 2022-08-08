@@ -47,8 +47,7 @@ class _LoginsignState extends State<LoginPage> {
     SizeConfig.init(context);
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 15, 17, 19),
-      body: Container(
-        decoration: const BoxDecoration(gradient: LinearGradient(colors: [Color.fromARGB(255, 22, 22, 25), Colors.black, Color.fromARGB(255, 15, 17, 19)], begin: Alignment.topLeft, end: Alignment.bottomRight)),
+      body: SizedBox(
         width: SizeConfig.screenWidth,
         height: SizeConfig.screenHeight,
         child: Column(

@@ -52,7 +52,6 @@ class _ForgotState extends State<Forgot> {
             Container(
               width: SizeConfig.screenWidth,
               height: SizeConfig.screenHeight! - 80,
-              decoration: const BoxDecoration(gradient: LinearGradient(colors: [Color.fromARGB(255, 22, 22, 25), Colors.black, Color.fromARGB(255, 15, 17, 19)], begin: Alignment.topLeft, end: Alignment.bottomRight)),
               padding: ProjectPadding.horizontalPadding(value: 40),
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
