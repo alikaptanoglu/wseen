@@ -19,8 +19,8 @@ class XMLPayment{
   final String KK_SK_Yil;
   final String KK_CVC;
   final String KK_Sahibi_GSM = '';
-  final String Hata_URL = 'https://www.w-seen.com/success/';
-  final String Basarili_URL = 'https://www.facebook.com';
+  final String Hata_URL = 'https://www.w-seen.com/failed/';
+  final String Basarili_URL = 'https://www.w-seen.com/success /';
   final String Siparis_ID;
   final String Siparis_Aciklama = '';
   final String Taksit = '1';

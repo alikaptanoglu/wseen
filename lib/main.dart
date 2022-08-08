@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
@@ -54,18 +55,11 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
 
-  Map? cookieMap;
-  bool? isLogin;
-
-  String email = '';
-  String password = '';
-
   @override
   void initState() {
     getIp();
     _getPermission();
     getToken();
-    _getUserCookies();
     _initializeRemoteConfig();
     super.initState();
   }
@@ -90,27 +84,9 @@ class _AppState extends State<App> {
           scaffoldBackgroundColor: const Color.fromARGB(255, 15, 15, 15),
           brightness: Brightness.light,
         ),
-        home: parsedJson == null || isLogin == null
+        home: parsedJson == null
           ? Scaffold(backgroundColor: const Color.fromARGB(255, 20, 22, 25), body: Center(child: CircularProgressIndicator.adaptive(valueColor: AlwaysStoppedAnimation<Color>(ProjectColors.themeColorMOD5))))
           : const Main());
-        // home: StreamBuilder<User?>(
-        //   stream: FirebaseAuth.instance.authStateChanges(),
-        //   builder: (context, snapshot) {
-        //     if(parsedJson == null || isLogin == null){
-        //       return const Center(child: CircularProgressIndicator(color: Colors.orange));
-        //     }else{
-        //       if(snapshot.connectionState == ConnectionState.waiting) return const Center(child: CircularProgressIndicator(color: Colors.orange));
-        //       if(snapshot.hasData){
-        //         return const Monitor();
-        //       } else {
-        //         return const Main();
-        //       }
-        //     }
-        //     // FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password).then((value) {
-        //     //       return value.user != null ? const Monitor() : const Main();
-        //     //     });
-        //   },
-        // ));
   }
   
   Future<void> _initializeRemoteConfig() async {
@@ -139,19 +115,6 @@ class _AppState extends State<App> {
     }
   }
 
-  _getUserCookies(){
-    cookieMap = CookieManager.getCookieAsMap();
-    isLogin = stringToBoolean(cookieMap!['login'] ?? '');
-    if(isLogin!){
-      email = cookieMap!['email'];
-      password = cookieMap!['password'];
-      //FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
-    }
-    setState(() {
-      
-    });
-  }
-
   Future<void> _getPermission() async {
     FirebaseMessaging messaging = FirebaseMessaging.instance;
     NotificationSettings settings = await messaging.requestPermission(
@@ -168,3 +131,22 @@ class _AppState extends State<App> {
     });
   }
 }
+
+        // home: StreamBuilder<User?>(
+        //   stream: FirebaseAuth.instance.authStateChanges(),
+        //   builder: (context, snapshot) {
+        //     if(parsedJson == null || isLogin == null){
+        //       return const Center(child: CircularProgressIndicator(color: Colors.orange));
+        //     }else{
+        //       if(snapshot.connectionState == ConnectionState.waiting) return const Center(child: CircularProgressIndicator(color: Colors.orange));
+        //       if(snapshot.hasData){
+        //         return const Monitor();
+        //       } else {
+        //         return const Main();
+        //       }
+        //     }
+        //     // FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password).then((value) {
+        //     //       return value.user != null ? const Monitor() : const Main();
+        //     //     });
+        //   },
+        // ));

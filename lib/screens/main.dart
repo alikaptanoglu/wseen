@@ -1,16 +1,19 @@
 import 'dart:async';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:wseen/helpers/helpers.dart';
 import 'package:wseen/models/bar.dart';
 import 'package:wseen/models/endsection.dart';
 import 'package:wseen/models/floatingactionbutton.dart';
 import 'package:wseen/models/loading.dart';
 import 'package:wseen/products/products.dart';
 import 'package:wseen/providers/providers.dart';
+import 'package:wseen/services/cookie.dart';
 
 class Main extends StatefulWidget {
   const Main({Key? key}) : super(key: key);
@@ -21,10 +24,16 @@ class Main extends StatefulWidget {
 
 class _MainState extends State<Main> {
 
+  Map? cookieMap;
+  bool? isLogin;
+
+  String email = '';
+  String password = '';
   ScrollController scrollController = ScrollController();
 
   @override
   void initState() {
+    _getUserCookies();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {    
       Provider.of<ModelProvider>(context, listen: false).setAnimatedFloatButtonPositionedValue(0);
     });
@@ -48,47 +57,65 @@ class _MainState extends State<Main> {
     super.dispose();
   }
 
+
+   _getUserCookies() async {
+    cookieMap = CookieManager.getCookieAsMap();
+    isLogin = stringToBoolean(cookieMap!['login'] ?? '');
+    if(isLogin!){
+      email = cookieMap!['email'];
+      password = cookieMap!['password'];
+      await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password).then((value) => Navigator.of(context).pushNamedAndRemoveUntil('/monitor', (route) => false));
+    }
+    setState(() {
+      
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig.init(context);
+    return isLogin == null || isLogin! ? const Scaffold(backgroundColor: Color.fromARGB(255, 15, 17, 19) ,body: Center(child: CircularProgressIndicator.adaptive())) : body();
+  }
+
+  Scaffold body() {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 15, 17, 19),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: Stack(
-        children: [
-          ActionButton(scrollController: scrollController)
-        ],
-      ),
-      body: Stack(
-        children: [
-          Positioned(
-            top: 0,
-            child: Container(
-              width: SizeConfig.screenWidth!,
-              height: 1200,
-              decoration: const BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/ic_mainbackground.png'), fit: BoxFit.cover, colorFilter: ColorFilter.mode(Colors.black26, BlendMode.dstIn))),
+    backgroundColor: const Color.fromARGB(255, 15, 17, 19),
+    floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+    floatingActionButton: Stack(
+      children: [
+        ActionButton(scrollController: scrollController)
+      ],
+    ),
+    body: Stack(
+      children: [
+        Positioned(
+          top: 0,
+          child: Container(
+            width: SizeConfig.screenWidth!,
+            height: 1200,
+            decoration: const BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/ic_mainbackground.png'), fit: BoxFit.cover, colorFilter: ColorFilter.mode(Colors.black26, BlendMode.dstIn))),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 80),
+          child: SingleChildScrollView(
+            controller: scrollController,
+            child: Column(
+              children: [
+                buildSection1(),
+                buildSection2(),
+                buildSection3(),
+                buildSection4(),
+                const EndSection()
+              ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 80),
-            child: SingleChildScrollView(
-              controller: scrollController,
-              child: Column(
-                children: [
-                  buildSection1(),
-                  buildSection2(),
-                  buildSection3(),
-                  buildSection4(),
-                  const EndSection()
-                ],
-              ),
-            ),
-          ),
-          MainBar(isTransparent: true, isMainPage: true, scrollController: scrollController),
-          const LoadingTick()
-        ],
-      ),
-    );
+        ),
+        MainBar(isTransparent: true, isMainPage: true, scrollController: scrollController),
+        const LoadingTick()
+      ],
+    ),
+  );
   }
 
 
