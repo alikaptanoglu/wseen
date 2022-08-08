@@ -82,7 +82,7 @@ class _PaymentState extends State<Payment> {
                       Space.spaceHeight(SizeConfig.screenWidth! < 400 ? 15 : SizeConfig.screenWidth! < 500 ? 20 : 25),
                       Container(
                         width: SizeConfig.screenWidth! < 600 ? SizeConfig.screenWidth! * .8 : 500,
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), border: Border.all(color: Colors.black, width: 1), color: Colors.white),
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), border: Border.all(color: Colors.black, width: 1), color: Colors.white.withOpacity(0.8)),
                         child: Column(
                           children: [
                             SizedBox(
@@ -140,7 +140,7 @@ class _PaymentState extends State<Payment> {
     var expireMoth = expiryDate.split('/')[0];
     var expireYear = expiryDate.split('/')[1];
     cardNumber = cardNumber.split(' ').join('');
-    final Map paymentResult = await XMLPayment(cardHolderName, cardNumber, expireMoth, expireYear, cvvCode, 'orderID$siparisCount', 'orderID$siparisCount').request();
+    final Map paymentResult = await XMLPayment(cardHolderName, cardNumber, expireMoth, expireYear, cvvCode, 'lkadlfşlsvş$siparisCount', 'lkadlfşlsvş$siparisCount').request();
     Navigator.of(loadingContext).pop();
     final int sonuc = int.parse(paymentResult['Sonuc']);
     final int islemID = int.parse(paymentResult['Islem_ID']);
@@ -149,6 +149,7 @@ class _PaymentState extends State<Payment> {
     if(sonuc > 0 && islemID > 0){
       await _launchInBrowser(paymentURL);
       Utils.showSnackBar(text: paymentResult['Sonuc_Str'], color: Colors.red);
+      FirebaseFirestore.instance.collection('webpayment').doc().set({});
     } else  {
       Utils.showSnackBar(text: paymentResult['Sonuc_Str'], color: Colors.red);
     } 

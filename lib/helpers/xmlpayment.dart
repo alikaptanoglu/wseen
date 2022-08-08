@@ -20,7 +20,7 @@ class XMLPayment{
   final String KK_CVC;
   final String KK_Sahibi_GSM = '';
   final String Hata_URL = 'https://www.w-seen.com/failed/';
-  final String Basarili_URL = 'https://www.w-seen.com/success /';
+  final String Basarili_URL = 'https://www.w-seen.com/success/';
   final String Siparis_ID;
   final String Siparis_Aciklama = '';
   final String Taksit = '1';
@@ -47,7 +47,7 @@ class XMLPayment{
     </soap:Body>
     </soap:Envelope>''';
 
-    final responseSHA2B64 = await http.post(paymentURL, body: requestXMLSHA2B64, headers: {"Content-Type": "text/xml", "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "POST, GET, OPTIONS, PUT, DELETE, HEAD"});
+    final responseSHA2B64 = await http.post(paymentURL, body: requestXMLSHA2B64, headers: {"Content-Type": "text/xml", "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "POST, GET, OPTIONS, PUT, DELETE, HEAD", "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"});
     final XmlDocument responseSHA2B64XML = XmlDocument.parse(responseSHA2B64.body);
     Islem_Hash = XMLParse(responseSHA2B64XML).getHASH();
 
@@ -64,7 +64,7 @@ class XMLPayment{
     </soap:Envelope>
     ''';
 
-    final responseKOM = await http.post(paymentURL, body: requestKOM, headers: {"Content-Type": "text/xml", "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "POST, GET, OPTIONS, PUT, DELETE, HEAD"});
+    final responseKOM = await http.post(paymentURL, body: requestKOM, headers: {"Content-Type": "text/xml", "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "POST, GET, OPTIONS, PUT, DELETE, HEAD", "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"});
     final XmlDocument responseKOMXML = XmlDocument.parse(responseKOM.body);
     XMLParse(responseKOMXML).getCommissionRATIO();
 
@@ -111,7 +111,7 @@ class XMLPayment{
     </soap:Envelope>
     ''';
 
-    final responsePayment = await http.post(paymentURL, body: requestXMLPayment, headers: {"Content-Type": "text/xml", "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "POST, GET, OPTIONS, PUT, DELETE, HEAD"});
+    final responsePayment = await http.post(paymentURL, body: requestXMLPayment, headers: {"Content-Type": "text/xml", "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "POST, GET, OPTIONS, PUT, DELETE, HEAD", "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"});
     final XmlDocument responsePaymentXML = XmlDocument.parse(responsePayment.body);
     final Map resultMap = XMLParse(responsePaymentXML).getResult();
     return resultMap;

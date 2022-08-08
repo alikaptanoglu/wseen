@@ -24,11 +24,7 @@ class Main extends StatefulWidget {
 
 class _MainState extends State<Main> {
 
-  Map? cookieMap;
   bool? isLogin;
-
-  String email = '';
-  String password = '';
   ScrollController scrollController = ScrollController();
 
   @override
@@ -58,13 +54,13 @@ class _MainState extends State<Main> {
   }
 
 
-   _getUserCookies() async {
-    cookieMap = CookieManager.getCookieAsMap();
+   _getUserCookies(){
+    Map? cookieMap = CookieManager.getCookieAsMap();
     isLogin = stringToBoolean(cookieMap!['login'] ?? '');
     if(isLogin!){
-      email = cookieMap!['email'];
-      password = cookieMap!['password'];
-      await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password).then((value) => Navigator.of(context).pushNamedAndRemoveUntil('/monitor', (route) => false));
+      String email = cookieMap['email'];
+      String password = cookieMap['password'];
+      FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password).then((value) => Navigator.of(context).pushNamedAndRemoveUntil('/monitor', (route) => false));
     }
     setState(() {
       

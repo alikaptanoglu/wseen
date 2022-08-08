@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
@@ -7,13 +6,11 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:wseen/helpers/helpers.dart';
 import 'package:wseen/helpers/routegenerator.dart';
 import 'package:wseen/models/utils.dart';
 import 'package:wseen/products/colors.dart';
 import 'package:wseen/products/products.dart';
 import 'package:wseen/screens/main.dart';
-import 'package:wseen/services/services.dart';
 import 'providers/providers.dart';
 import 'package:url_strategy/url_strategy.dart';
 import 'package:get_ip_address/get_ip_address.dart';
@@ -67,7 +64,7 @@ class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        initialRoute: '/',
+        initialRoute: RouteGenerator.initialRoute,
         onGenerateRoute: RouteGenerator.generateRoute,
         title: 'Wseen - 🥇 ONLİNE WHATSAPP TRACKER',
         scrollBehavior: const MaterialScrollBehavior().copyWith(dragDevices: {PointerDeviceKind.mouse, PointerDeviceKind.touch, PointerDeviceKind.stylus, PointerDeviceKind.unknown}),
@@ -131,22 +128,3 @@ class _AppState extends State<App> {
     });
   }
 }
-
-        // home: StreamBuilder<User?>(
-        //   stream: FirebaseAuth.instance.authStateChanges(),
-        //   builder: (context, snapshot) {
-        //     if(parsedJson == null || isLogin == null){
-        //       return const Center(child: CircularProgressIndicator(color: Colors.orange));
-        //     }else{
-        //       if(snapshot.connectionState == ConnectionState.waiting) return const Center(child: CircularProgressIndicator(color: Colors.orange));
-        //       if(snapshot.hasData){
-        //         return const Monitor();
-        //       } else {
-        //         return const Main();
-        //       }
-        //     }
-        //     // FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password).then((value) {
-        //     //       return value.user != null ? const Monitor() : const Main();
-        //     //     });
-        //   },
-        // ));
