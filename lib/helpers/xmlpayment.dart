@@ -25,12 +25,12 @@ class XMLPayment{
   final String Siparis_Aciklama = '';
   final String Taksit = '1';
   final String Islem_Tutar = '10,00';
-  final String Toplam_Tutar = '10,35';
   final String Islem_Guvenlik_Tip = '3D';
   final String Islem_ID;
   final String IPAdr = '199.36.158.100';
   final String Ref_URL = 'www.facebook.com'; 
   late String Islem_Hash;
+  late String Toplam_Tutar;
 
   XMLPayment(this.KK_Sahibi, this.KK_No, this.KK_SK_Ay, this.KK_SK_Yil, this.KK_CVC, this.Islem_ID, this.Siparis_ID);
 
@@ -66,7 +66,8 @@ class XMLPayment{
 
     final responseKOM = await http.post(paymentURL, body: requestKOM, headers: {"Content-Type": "text/xml", "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "POST, GET, OPTIONS, PUT, DELETE, HEAD", "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"});
     final XmlDocument responseKOMXML = XmlDocument.parse(responseKOM.body);
-    XMLParse(responseKOMXML).getCommissionRATIO();
+    final double commissionRatio = XMLParse(responseKOMXML).getCommissionRATIO();
+    print(commissionRatio);
 
     final requestXMLPayment = '''<?xml version="1.0" encoding="utf-8"?>
     <soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">

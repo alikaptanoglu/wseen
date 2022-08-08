@@ -355,8 +355,8 @@ class _PaymentState extends State<Payment> {
           child: Container(
             width: SizeConfig.screenWidth! < 600 ? SizeConfig.screenWidth! * .8 : 500,
             height: SizeConfig.screenWidth! < 600 ? 50 : 60,
-            decoration: BoxDecoration(borderRadius: const BorderRadius.only(bottomRight: Radius.circular(20), topLeft: Radius.circular(20)), color: ProjectColors.themeColorMOD5),
-            child: Center(child: Text('PAY  NOW', style: GoogleFonts.poppins(fontSize: SizeConfig.screenWidth! < 400 ? 16 : SizeConfig.screenWidth! < 600 ? 18 : 20, color: Colors.white, fontWeight: FontWeight.bold))),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(15), color: ProjectColors.themeColorMOD5),
+            child: Center(child: Text('Buy Premium', style: GoogleFonts.roboto(fontSize: SizeConfig.screenWidth! < 400 ? 18 : SizeConfig.screenWidth! < 600 ? 20 : 22, color: Colors.white))),
           ),
         ),
       );
@@ -369,7 +369,7 @@ class _PaymentState extends State<Payment> {
       children: [
         Icon(FontAwesomeIcons.creditCard, color: ProjectColors.themeColorMOD5, size: w < 300 ? 15 : w < 400 ? 17 : w < 600 ? 20 : 25),
         Space.spaceWidth(w < 300 ? 10 : w < 400 ? 15 : 20),
-        Text('Purchase Subscription', style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.w700, fontSize: w < 300 ? 16 : w < 400 ? 20 : w < 600 ? 22 : 25)),
+        Text('Purchase Subscription', style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.w700, fontSize: w < 300 ? 18 : w < 400 ? 20 : w < 600 ? 22 : 25), textAlign: TextAlign.center),
       ],
     );
   }

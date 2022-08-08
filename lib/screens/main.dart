@@ -29,6 +29,7 @@ class _MainState extends State<Main> {
 
   @override
   void initState() {
+    if(!mounted) return;
     _getUserCookies();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {    
       Provider.of<ModelProvider>(context, listen: false).setAnimatedFloatButtonPositionedValue(0);

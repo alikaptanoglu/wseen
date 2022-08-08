@@ -102,7 +102,6 @@ class _MonitorState extends State<Monitor> {
         const CustomBar(),
         SingleChildScrollView(
           child: Container(
-            decoration: const BoxDecoration(gradient: LinearGradient(colors: [Color.fromARGB(255, 22, 22, 25), Colors.black, Color.fromARGB(255, 15, 17, 19)], begin: Alignment.topLeft, end: Alignment.bottomRight)),
             width: SizeConfig.screenWidth!,
             height: SizeConfig.screenHeight! - 60,
             padding: const EdgeInsets.all(20),
@@ -111,6 +110,7 @@ class _MonitorState extends State<Monitor> {
               children: [
                 _buildAddNumberButton(context),
                 _buildContactUser(value),
+                Space.spaceHeight(20),
                 Space.expandedSpace(),
                 isPremium! ? Space.emptySpace : value.subscriptionExpDate.isNegative ? buildFreeTrialOver() : buildFreeTrialCounter(value, context),
               ],
